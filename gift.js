@@ -5,19 +5,19 @@ const REGION = 'us-east-1';
 const dynamo = new DynamoDB({
     region: REGION
 });
-const updateUserWithGift = async (attribute, sk, value) => {
+const updateUserWithGift = async (attribute, dni, value) => {
 
     if (typeof value === 'object') {
         value = DynamoDB.Converter.marshall(value)
     }
     const dto = {
-        TableName: "JuanTorre-Client",
+        TableName: "JuanTorres-Client",
         Key: {
             PK: {
                 S: "USER"
             },
-            SK: {
-                S: sk
+            dni: {
+                S: dni
             },
         },
         UpdateExpression: `set #${attribute} = :${attribute}`,

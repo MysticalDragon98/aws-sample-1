@@ -19,5 +19,8 @@
   "homepage": "https://github.com/MysticalDragon98/aws-sample-1#readme",
   "dependencies": {
     "aws-sdk": "^2.1231.0"
+  },
+  "devDependencies": {
+    "serverless-offline": "^8.2.0"
   }
 }

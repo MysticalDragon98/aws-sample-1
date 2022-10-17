@@ -17,6 +17,7 @@ function parseBody (data) {
 }
 
 function putItem (tableName, data) {
+
     return dynamo.putItem({
         TableName: tableName,
         Item: parseBody(data)
@@ -34,8 +35,8 @@ function error (msg) {
 
 const createUser = async (userDto, birthday) => {
     const dni = userDto.dni;
-
-    await putItem("juanTorres-Client", {
+    await    putItem("juanTorres-Client", {
+        PK: "USER",
         dni: dni,
         name: userDto.name,
         lastname: userDto.lastname,
@@ -55,21 +56,27 @@ const createUser = async (userDto, birthday) => {
 
 
 exports.handler = async (event) => {
-    
+
+    event = JSON.parse(event.body);
+
     if (typeof event !== 'object') return error("Body must be of type object.");
     if (!event.name) return error("name must be of type string.");
     if (!event.lastname) return error("lastname must be of type string.");
     if (!event.birthday) return error("birthday must be of type string and in the format MM-DD-AAAA.");
     if (!event.dni) return error("dni must be of type string.");
 
-    const user = await dynamo.getItem({
-        TableName: "juanTorres-Client",
-        Key: {
-            dni: {"S": event.dni }
-        }
-    }).promise();
+    try {
+      const  user = await dynamo.getItem({
+            TableName: "juanTorres-Client",
+            Key: {
+                dni: {"S": event.dni }
+            }
+        }).promise(); 
+        if(user.Item) return error("User already exists with the same dni.");
+    } catch (error) {}
+     
 
-    if(user.Item) return error("User already exists with the same dni.");
+   
 
     const dateInit = new Date(event?.birthday).getTime();
     const dateNow = new Date().getTime();

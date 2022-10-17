@@ -1,5 +1,9 @@
 service: juanTorres
 
+plugins:
+  - serverless-offline
+
+
 provider:
   name: aws
   region: us-east-1

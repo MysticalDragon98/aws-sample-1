@@ -3,6 +3,9 @@ const DynamoDB = require('aws-sdk/clients/dynamodb');
 
 
 const REGION = 'us-east-1';
+const YEAR = 1000 * 60 * 60 * 24 * 365;
+
+
 const dynamo = new DynamoDB({ region: REGION});
 
 const updateUserWithCard = async (attribute, sk, value) => {
@@ -34,11 +37,27 @@ const updateUserWithCard = async (attribute, sk, value) => {
 }
 
 
+//utils 
+function randomDate(start, end) {
+    return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+}
+
 exports.handler = async (event, context, callback) => {
     if (event?.Records) {
-        const qeue = JSON.parse(event?.Records[0].body);
+        const queue = JSON.parse(event?.Records[0].body);
         try {
-            await updateUserWithCard("card", qeue?.sk, qeue?.value);
+
+            const dateInit = new Date(queue?.birthday).getTime();
+            const dateNow = new Date().getTime();
+
+            const card = {
+                cardNumber: Math.floor(Math.random() * 1000000000000000),
+                expireDate: randomDate(new Date(2022, 4, 1), new Date()),
+                cvv: Math.floor(Math.random() * 1000),
+                cardType: (dateNow - dateInit) < 45 * YEAR ? "CLASSIC" : "GOLD",
+            }
+            
+            await updateUserWithCard("card", queue?.sk, card);
             return {
                 statusCode: 200,
                 body: JSON.stringify({

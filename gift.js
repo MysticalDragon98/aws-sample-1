@@ -40,9 +40,27 @@ const updateUserWithGift = async (attribute, sk, value) => {
 
 exports.handler = async (event, context, callback) => {
     if (event?.Records) {
-        const qeue = JSON.parse(event?.Records[0].body);
+        const queue = JSON.parse(event?.Records[0].body);
         try {
-            await updateUserWithGift("gift", qeue?.sk, qeue?.value);
+            const getSeason = d => Math.floor((d.getMonth() / 12 * 4)) % 4
+            const season = ['Summer', 'Autumn', 'Winter', 'Spring'][getSeason(new Date())];
+        
+            let gift = '';
+            switch (season) {
+                case "Summer":
+                    gift = "remera"
+                    break;
+                case "Autumn":
+                    gift = "buzo"
+                    break;
+                case "Winter":
+                    gift = "sweater"
+                    break;
+                case "Spring":
+                    gift = "camisa"
+                    break;
+            }
+            await updateUserWithGift("gift", queue?.sk, gift);
             return {
                 statusCode: 200,
                 body: JSON.stringify({

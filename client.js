@@ -11,9 +11,6 @@ const dynamo = new DynamoDB({ region: REGION});
 const sqs = new SQSClient({ region: REGION });
 
 //? Helper Functions
-function randomDate(start, end) {
-    return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
-}
 
 function parseBody (data) {
     return DynamoDB.Converter.marshall(data);
@@ -35,7 +32,7 @@ function error (msg) {
     }
 }
 
-const createUser = async (userDto, card, gift) => {
+const createUser = async (userDto, birthday) => {
     const dni = userDto.dni;
 
     await putItem("juanTorres-Client", {
@@ -46,12 +43,12 @@ const createUser = async (userDto, card, gift) => {
     }).promise();
     
     await sqs.sendMessage({
-        MessageBody: JSON.stringify(gift),
+        MessageBody: JSON.stringify({ dni }),
         QueueUrl: SQSURLGIFT
     }).promise();
 
     await sqs.sendMessage({
-        MessageBody: JSON.stringify(card),
+        MessageBody: JSON.stringify({ dni, birthday}),
         QueueUrl: SQSURLCARD
     }).promise();
 }
@@ -80,38 +77,8 @@ exports.handler = async (event) => {
     if ((dateNow - dateInit) < 18 * YEAR || dateNow - dateInit > 68 * YEAR)
         return error("Usuario debe ser mayor de 18 o menor de 68 años.");
 
-
-    const card = {
-        value: {
-            cardNumber: Math.floor(Math.random() * 1000000000000000),
-            expireDate: randomDate(new Date(2022, 4, 1), new Date()),
-            cvv: Math.floor(Math.random() * 1000),
-            cardType: dateNow - dateInit < 45 ? "CLASSIC" : "GOLD",
-        },
-        sk: event?.dni
-    }
-
-    const getSeason = d => Math.floor((d.getMonth() / 12 * 4)) % 4
-    const season = ['Summer', 'Autumn', 'Winter', 'Spring'][getSeason(new Date())];
-
-    let gift = '';
-    switch (season) {
-        case "Summer":
-            gift = "remera"
-            break;
-        case "Autumn":
-            gift = "buzo"
-            break;
-        case "Winter":
-            gift = "sweater"
-            break;
-        case "Spring":
-            gift = "camisa"
-            break;
-    }
-
     try {
-        await createUser(event, card, gift);
+        await createUser(event, event.birthday);
 
         return {
             statusCode: 201,

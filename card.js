@@ -57,7 +57,7 @@ exports.handler = async (event, context, callback) => {
                 cardType: (dateNow - dateInit) < 45 * YEAR ? "CLASSIC" : "GOLD",
             }
             
-            await updateUserWithCard("card", queue?.sk, card);
+            await updateUserWithCard("card", queue?.dni, card);
             return {
                 statusCode: 200,
                 body: JSON.stringify({

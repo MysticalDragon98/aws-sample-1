@@ -60,7 +60,7 @@ exports.handler = async (event, context, callback) => {
                     gift = "camisa"
                     break;
             }
-            await updateUserWithGift("gift", queue?.sk, gift);
+            await updateUserWithGift("gift", queue?.dni, gift);
             return {
                 statusCode: 200,
                 body: JSON.stringify({

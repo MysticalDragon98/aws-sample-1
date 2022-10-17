@@ -1,8 +1,5 @@
 service: juanTorres
 
-plugins:
-  - serverless-offline
-
 provider:
   name: aws
   region: us-east-1
@@ -32,8 +29,8 @@ functions:
           - "sqs:SendMessage"
           - "sqs:GetQueueUrl"
         Resource: 
-          - "arn:aws:sqs:${self:provider.region}:*:juanTorres-cardqueue"
-          - "arn:aws:sqs:${self:provider.region}:*:juanTorres-giftqueue"
+          - !GetAtt CardQueue.Arn
+          - !GetAtt GiftQueue.arn
     environment:
       SQSURLCARD: { Ref : CardQueue}
       SQSURLGIFT: { Ref : GiftQueue}
@@ -47,8 +44,7 @@ functions:
       - Effect: "Allow"
         Action:
           - "sqs:ReceiveMessage"
-        Resource: 
-          - "arn:aws:sqs:${self:provider.region}:${self:provider.accountAwsId}:juanTorres-cardqueue"
+        Resource: !GetAtt CardQueue.Arn
   
   gift:
     handler: gift.handler
@@ -61,15 +57,15 @@ functions:
         Action:
           - "sqs:ReceiveMessage"
         Resource: 
-          - "arn:aws:sqs:${self:provider.region}:${self:provider.accountAwsId}:juanTorres-giftqueue"
+          - !GetAtt GiftQueue.arn
 
 resources:
   Resources:
-    CardQueue:
-      Type: "AWS:SQS:Queue"
-      Properties:
-        QueueName: "juanTorres-cardqueue"
-    GiftQueue:
-      Type: "AWS:SQS:Queue"
-      Properties:
-        QueueName: "juanTorres-giftqueue"
+    - CardQueue:
+        Type: "AWS::SQS::Queue"
+        Properties:
+          QueueName: "juanTorres-cardqueue"
+    - GiftQueue:
+        Type: "AWS::SQS::Queue"
+        Properties:
+          QueueName: "juanTorres-giftqueue"

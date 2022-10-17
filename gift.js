@@ -1,20 +1,17 @@
-const AWS = require('aws-sdk');
+const DynamoDB = require('aws-sdk/clients/dynamodb');
 
-//set region 
-AWS.config.update({
-    region: 'us-east-1'
+
+const REGION = 'us-east-1';
+const dynamo = new DynamoDB({
+    region: REGION
 });
+const updateUserWithGift = async (attribute, sk, value) => {
 
-//intance dynamo db
-const dynamo = new AWS.DynamoDB();
-
-const updateUser = async (attribute, sk, value) => {
-    
-    if(typeof value === 'object'){
-      value =  AWS.DynamoDB.Converter.marshall(value)
+    if (typeof value === 'object') {
+        value = DynamoDB.Converter.marshall(value)
     }
     const dto = {
-        TableName: "JuanCamilo-Client",
+        TableName: "JuanTorre-Client",
         Key: {
             PK: {
                 S: "USER"
@@ -24,12 +21,16 @@ const updateUser = async (attribute, sk, value) => {
             },
         },
         UpdateExpression: `set #${attribute} = :${attribute}`,
-        ExpressionAttributeNames:{
-            [`#${attribute}`] : attribute
+        ExpressionAttributeNames: {
+            [`#${attribute}`]: attribute
         },
         ExpressionAttributeValues: {
             [`:${attribute}`]: {
-                ...typeof value === 'object' ? { M: value } : { S : value  }
+                ...typeof value === 'object' ? {
+                    M: value
+                } : {
+                    S: value
+                }
             },
         },
     }
@@ -37,22 +38,30 @@ const updateUser = async (attribute, sk, value) => {
 }
 
 
-exports.handler = async (event) => {
-
+exports.handler = async (event, context, callback) => {
     if (event?.Records) {
         const qeue = JSON.parse(event?.Records[0].body);
-        await updateUser("gift", qeue?.sk, qeue?.value);
-
-        return {
-            statusCode: 200,
-            body: JSON.stringify({
-                message: "update was succesfully"
-            })
+        try {
+            await updateUserWithGift("gift", qeue?.sk, qeue?.value);
+            return {
+                statusCode: 200,
+                body: JSON.stringify({
+                    message: "update was succesfully"
+                })
+            }
+        } catch (error) {
+            return {
+                statusCode: 500,
+                body: JSON.stringify({
+                    message: error
+                })
+            }
         }
     }
     return {
-        statusCode: 201,
-        body: JSON.stringify(createuser)
+        statusCode: 400,
+        body: JSON.stringify({
+            message: "Not Authorized"
+        })
     }
-
 }

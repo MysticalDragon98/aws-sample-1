@@ -1,0 +1,73 @@
+service: juanTorres
+
+
+provider:
+  name: aws
+  region: us-east-1
+  runtime: nodejs12.x
+  stage: dev
+  accountAwsId: AWS::AccountId
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - 'dynamodb:GetItem'
+        - 'dynamodb:PutItem'
+        - 'dynamodb:UpdateItem'
+      Resource:
+        - 'arn:aws:dynamodb:us-east-1:${self:provider.accountAwsId}:table/juanTorres-Client'
+  
+functions:
+  client:
+    handler: client.handler
+    name: ${self:service}-${self:provider.stage}-create-client
+    events:
+      - http:
+          method: post
+          path: create/client
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "sqs:SendMessage"
+          - "sqs:GetQueueUrl"
+        Resource: 
+          - "arn:aws:sqs:${self:provider.region}:*:juanTorres-cardqueue"
+          - "arn:aws:sqs:${self:provider.region}:*:juanTorres-giftqueue"
+    environment:
+      SQSURLCARD: { Ref : CardQueue}
+      SQSURLGIFT: { Ref : GiftQueue}
+  card:
+    handler: card.handler
+    name: ${self:service}-${self:provider.stage}-create-card
+    events:
+      - sqs:
+          arn: !GetAtt CardQueue.Arn
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "sqs:ReceiveMessage"
+        Resource: 
+          - "arn:aws:sqs:${self:provider.region}:${self:provider.accountAwsId}:juanTorres-cardqueue"
+  
+  gift:
+    handler: gift.handler
+    name: ${self:service}-${self:provider.stage}-create-gift
+    events:
+      - sqs:
+          arn: !GetAtt GiftQueue.arn
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "sqs:ReceiveMessage"
+        Resource: 
+          - "arn:aws:sqs:${self:provider.region}:${self:provider.accountAwsId}:juanTorres-giftqueue"
+
+resources:
+  Resources:
+    CardQueue:
+      Type: "AWS:SQS:Queue"
+      Properties:
+        QueueName: "juanTorres-cardqueue"
+    GiftQueue:
+      Type: "AWS:SQS:Queue"
+      Properties:
+        QueueName: "juanTorres-giftqueue"

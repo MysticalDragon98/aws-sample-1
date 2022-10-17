@@ -30,7 +30,7 @@ functions:
           - "sqs:GetQueueUrl"
         Resource: 
           - !GetAtt CardQueue.Arn
-          - !GetAtt GiftQueue.arn
+          - !GetAtt GiftQueue.Arn
     environment:
       SQSURLCARD: { Ref : CardQueue}
       SQSURLGIFT: { Ref : GiftQueue}
@@ -51,21 +51,64 @@ functions:
     name: ${self:service}-${self:provider.stage}-create-gift
     events:
       - sqs:
-          arn: !GetAtt GiftQueue.arn
+          arn: !GetAtt GiftQueue.Arn
     iamRoleStatements:
       - Effect: "Allow"
         Action:
           - "sqs:ReceiveMessage"
         Resource: 
-          - !GetAtt GiftQueue.arn
+          - !GetAtt GiftQueue.Arn
 
 resources:
   Resources:
-    - CardQueue:
-        Type: "AWS::SQS::Queue"
-        Properties:
-          QueueName: "juanTorres-cardqueue"
-    - GiftQueue:
+    CardQueue:
+      Type: "AWS::SQS::Queue"
+      Properties:
+        QueueName: "juanTorres-cardqueue"
+      CardQueuePolicy:
+        Type: AWS::SQS::QueuePolicy
+        Properties: 
+          PolicyDocument: 
+            Statement:
+              - Effect: Allow
+                Action: 
+                  - SQS:*
+                Resource: !GetAtt CardQueue.Arn
+                Principal:
+                  AWS:
+                    - !Ref AWS::AccountId
+              - Effect: Allow
+                Principal:
+                  AWS: 
+                    - '*'
+                Action: 
+                  - SQS:SendMessage
+                Resource: !GetAtt CardQueue.Arn
+          Queues: 
+            - !Ref CardQueue
+    
+    GiftQueue:
         Type: "AWS::SQS::Queue"
         Properties:
           QueueName: "juanTorres-giftqueue"
+        CardQueuePolicy:
+          Type: AWS::SQS::QueuePolicy
+          Properties: 
+            PolicyDocument: 
+              Statement:
+                - Effect: Allow
+                  Action: 
+                    - SQS:*
+                  Resource: !GetAtt GiftQueue.Arn
+                  Principal:
+                    AWS:
+                      - !Ref AWS::AccountId
+                - Effect: Allow
+                  Principal:
+                    AWS: 
+                      - '*'
+                  Action: 
+                    - SQS:SendMessage
+                  Resource: !GetAtt GiftQueue.Arn
+            Queues: 
+              - !Ref GiftQueue

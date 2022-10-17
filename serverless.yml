@@ -1,5 +1,7 @@
 service: juanTorres
 
+plugins:
+  - serverless-offline
 
 provider:
   name: aws

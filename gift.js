@@ -6,12 +6,8 @@ const dynamo = new DynamoDB({
     region: REGION
 });
 const updateUserWithGift = async (attribute, dni, value) => {
-
-    if (typeof value === 'object') {
-        value = DynamoDB.Converter.marshall(value)
-    }
     const dto = {
-        TableName: "JuanTorres-Client",
+        TableName: process.env.DYNAMOTABLE,
         Key: {
             PK: {
                 S: "USER"
@@ -26,11 +22,7 @@ const updateUserWithGift = async (attribute, dni, value) => {
         },
         ExpressionAttributeValues: {
             [`:${attribute}`]: {
-                ...typeof value === 'object' ? {
-                    M: value
-                } : {
-                    S: value
-                }
+                S: value
             },
         },
     }
@@ -44,7 +36,7 @@ exports.handler = async (event, context, callback) => {
         try {
             const getSeason = d => Math.floor((d.getMonth() / 12 * 4)) % 4
             const season = ['Summer', 'Autumn', 'Winter', 'Spring'][getSeason(new Date())];
-        
+
             let gift = '';
             switch (season) {
                 case "Summer":

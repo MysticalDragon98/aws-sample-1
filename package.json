@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test:card": "serverless invoke local -f card --path",
+    "test:gift": "serverless invoke local -f gift --path"
+
   },
   "repository": {
     "type": "git",
@@ -19,8 +21,5 @@
   "homepage": "https://github.com/MysticalDragon98/aws-sample-1#readme",
   "dependencies": {
     "aws-sdk": "^2.1231.0"
-  },
-  "devDependencies": {
-    "serverless-offline": "^8.2.0"
   }
 }

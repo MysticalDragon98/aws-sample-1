@@ -35,7 +35,7 @@ function error (msg) {
 
 const createUser = async (userDto, birthday) => {
     const dni = userDto.dni;
-    await    putItem("juanTorres-Client", {
+    await    putItem(process.env.DYNAMOTABLE,{
         PK: "USER",
         dni: dni,
         name: userDto.name,

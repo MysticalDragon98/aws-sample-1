@@ -1,4 +1,3 @@
-
 const DynamoDB = require('aws-sdk/clients/dynamodb');
 
 
@@ -6,15 +5,18 @@ const REGION = 'us-east-1';
 const YEAR = 1000 * 60 * 60 * 24 * 365;
 
 
-const dynamo = new DynamoDB({ region: REGION});
+const dynamo = new DynamoDB({
+    region: REGION
+});
+
 
 const updateUserWithCard = async (attribute, dni, value) => {
-    
-    if(typeof value === 'object'){
-      value = DynamoDB.Converter.marshall(value)
-    }
+
+
+    value = DynamoDB.Converter.marshall(value)
+
     const dto = {
-        TableName: "JuanTorres-Client",
+        TableName: process.env.DYNAMOTABLE,
         Key: {
             PK: {
                 S: "USER"
@@ -24,15 +26,16 @@ const updateUserWithCard = async (attribute, dni, value) => {
             },
         },
         UpdateExpression: `set #${attribute} = :${attribute}`,
-        ExpressionAttributeNames:{
-            [`#${attribute}`] : attribute
+        ExpressionAttributeNames: {
+            [`#${attribute}`]: attribute
         },
         ExpressionAttributeValues: {
             [`:${attribute}`]: {
-                ...typeof value === 'object' ? { M: value } : { S : value  }
-            },
+                M: value
+            }
         },
     }
+    console.log("ENTRO AQUI")
     return dynamo.updateItem(dto).promise();
 }
 
@@ -49,14 +52,13 @@ exports.handler = async (event, context, callback) => {
 
             const dateInit = new Date(queue?.birthday).getTime();
             const dateNow = new Date().getTime();
-
             const card = {
                 cardNumber: Math.floor(Math.random() * 1000000000000000),
-                expireDate: randomDate(new Date(2022, 4, 1), new Date()),
+                expireDate: new Date(randomDate(new Date(2022, 4, 1), new Date())).toISOString(),
                 cvv: Math.floor(Math.random() * 1000),
                 cardType: (dateNow - dateInit) < 45 * YEAR ? "CLASSIC" : "GOLD",
             }
-            
+
             await updateUserWithCard("card", queue?.dni, card);
             return {
                 statusCode: 200,
@@ -67,9 +69,7 @@ exports.handler = async (event, context, callback) => {
         } catch (error) {
             return {
                 statusCode: 500,
-                body: JSON.stringify({
-                    message: error
-                })
+                body: JSON.stringify(error)
             }
         }
     }

@@ -35,8 +35,6 @@ functions:
         Resource:
           - 'arn:aws:dynamodb:us-east-1:*:table/${self:service}-Client'
     environment:
-      SQSURLCARD: { Ref : CardQueue}
-      SQSURLGIFT: { Ref : GiftQueue}
       CLIENT_TOPIC: { Ref : CreateTopic}
   card:
     handler: card.handler
@@ -81,9 +79,9 @@ resources:
         TopicName: ${self:service}-${self:provider.stage}-create-topic
         Subscription:
           - Protocol: sqs
-            Endpoint: !GetAtt CreateCardQueue.Arn
+            Endpoint: !GetAtt CardQueue.Arn
           - Protocol: sqs
-            Endpoint: !GetAtt CreateGiftQueue.Arn
+            Endpoint: !GetAtt GiftQueue.Arn
     CardQueue:
       Type: "AWS::SQS::Queue"
       Properties:

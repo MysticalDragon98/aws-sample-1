@@ -1,5 +1,7 @@
 service: juanTorres
 
+plugins:
+  - serverless-iam-roles-per-function
 
 provider:
   name: aws
@@ -8,19 +10,7 @@ provider:
   stage: ${opt:stage, 'dev'}
   environment:
     DYNAMOTABLE: ${self:service}-Client
-  iamRoleStatements: 
-    - Effect: Allow
-      Action:
-        - sns:Publish
-      Resource:
-        - !Ref CreateTopic
-    - Effect: Allow
-      Action:
-        - dynamodb:PutItem
-        - dynamodb:GetItem
-        - dynamodb:UpdateItem
-      Resource:
-        - 'arn:aws:dynamodb:us-east-1:*:table/${self:service}-Client'
+
 functions:
   client:
     handler: client.handler

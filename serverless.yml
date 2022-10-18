@@ -8,32 +8,41 @@ provider:
   stage: ${opt:stage, 'dev'}
   environment:
     DYNAMOTABLE: ${self:service}-Client
-  
+  iamRoleStatements: 
+    - Effect: Allow
+      Action:
+        - sns:Publish
+      Resource:
+        - !Ref CreateTopic
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+        - dynamodb:GetItem
+        - dynamodb:UpdateItem
+      Resource:
+        - 'arn:aws:dynamodb:us-east-1:*:table/${self:service}-Client'
 functions:
   client:
     handler: client.handler
     name: ${self:service}-${self:provider.stage}-create-client
-    events:
-      - http:
-          method: post
-          path: /client
-          cors:  
-            origin: '*'
-    iamRoleStatements:
-      - Effect: "Allow"
+    iamRoleStatements: 
+      - Effect: Allow
         Action:
-          - "sqs:SendMessage"
-          - "sqs:GetQueueUrl"
-        Resource: 
-          - !GetAtt CardQueue.Arn
-          - !GetAtt GiftQueue.Arn
-      - Effect: 'Allow'
+          - sns:Publish
+        Resource:
+          - !Ref CreateTopic
+      - Effect: Allow
         Action:
-          - 'dynamodb:GetItem'
-          - 'dynamodb:PutItem'
-          - 'dynamodb:UpdateItem'
+          - dynamodb:PutItem
+          - dynamodb:GetItem
         Resource:
           - 'arn:aws:dynamodb:us-east-1:*:table/${self:service}-Client'
+    events:
+      - http:
+          path: /client
+          method: post
+          cors: true
+        
     environment:
       CLIENT_TOPIC: { Ref : CreateTopic}
   card:
@@ -76,6 +85,7 @@ resources:
     CreateTopic:
       Type: AWS::SNS::Topic
       Properties:
+        DisplayName: Created Topic
         TopicName: ${self:service}-${self:provider.stage}-create-topic
         Subscription:
           - Protocol: sqs

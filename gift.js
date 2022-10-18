@@ -32,13 +32,13 @@ const updateUserWithGift = async (attribute, dni, value) => {
 
 exports.handler = async (event, context, callback) => {
 
-    const queue = event.Records.map((record) => record.body);
+    const queue = event.Records.map((record) => JSON.parse(record.body)?.Message);
 
 
 
 
-    for (const item of queue) {
-        const queue = JSON.parse(event?.Records[0].body);
+    for (let item of queue) {
+        item = JSON.parse(item);
         try {
             const getSeason = d => Math.floor((d.getMonth() / 12 * 4)) % 4
             const season = ['Summer', 'Autumn', 'Winter', 'Spring'][getSeason(new Date())];
@@ -59,6 +59,8 @@ exports.handler = async (event, context, callback) => {
                     break;
             }
             await updateUserWithGift("gift", item?.dni, gift);
+
+            console.log("update")
             return {
                 statusCode: 200,
                 body: JSON.stringify({
@@ -66,6 +68,7 @@ exports.handler = async (event, context, callback) => {
                 })
             }
         } catch (error) {
+            console.log("errpr ", JSON.stringify(error))
             return {
                 statusCode: 500,
                 body: JSON.stringify({

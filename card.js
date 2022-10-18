@@ -12,7 +12,6 @@ const dynamo = new DynamoDB({
 
 const updateUserWithCard = async (attribute, dni, value) => {
 
-
     value = DynamoDB.Converter.marshall(value)
 
     const dto = {
@@ -35,7 +34,6 @@ const updateUserWithCard = async (attribute, dni, value) => {
             }
         },
     }
-    console.log("ENTRO AQUI")
     return dynamo.updateItem(dto).promise();
 }
 
@@ -46,8 +44,9 @@ function randomDate(start, end) {
 }
 
 exports.handler = async (event, context, callback) => {
-    const queue = event.Records.map((record) => record.body);
-    for (const item of queue) {
+    const queue = event.Records.map((record) => JSON.parse(record.body)?.Message);
+    for (let item of queue) {
+        item = JSON.parse(item);
         try {
 
             const dateInit = new Date(item?.birthday).getTime();
@@ -60,6 +59,7 @@ exports.handler = async (event, context, callback) => {
             }
 
             await updateUserWithCard("card", item?.dni, card);
+            console.log("update")
             return {
                 statusCode: 200,
                 body: JSON.stringify({
@@ -67,6 +67,7 @@ exports.handler = async (event, context, callback) => {
                 })
             }
         } catch (error) {
+            console.log("update", error)
             return {
                 statusCode: 500,
                 body: JSON.stringify(error)

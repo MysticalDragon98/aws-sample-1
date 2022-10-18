@@ -1,16 +1,14 @@
-const SQSClient = require('aws-sdk/clients/sqs');
+const SNSClient = require('aws-sdk/clients/sns');
 const DynamoDB = require('aws-sdk/clients/dynamodb');
 
 //? Instance Dependencies
 const REGION = 'us-east-1';
 const YEAR = 1000 * 60 * 60 * 24 * 365;
-const SQSURLGIFT = process.env.SQSURLCARD;
-const SQSURLCARD = process.env.SQSURLGIFT;
 
 const dynamo = new DynamoDB({
     region: REGION
 });
-const sqs = new SQSClient({
+const sns = new SNSClient({
     region: REGION
 });
 

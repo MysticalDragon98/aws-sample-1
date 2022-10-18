@@ -59,7 +59,6 @@ exports.handler = async (event, context, callback) => {
             }
 
             await updateUserWithCard("card", item?.dni, card);
-            console.log("update")
             return {
                 statusCode: 200,
                 body: JSON.stringify({
@@ -67,7 +66,6 @@ exports.handler = async (event, context, callback) => {
                 })
             }
         } catch (error) {
-            console.log("update", error)
             return {
                 statusCode: 500,
                 body: JSON.stringify(error)

@@ -59,8 +59,6 @@ exports.handler = async (event, context, callback) => {
                     break;
             }
             await updateUserWithGift("gift", item?.dni, gift);
-
-            console.log("update")
             return {
                 statusCode: 200,
                 body: JSON.stringify({
@@ -68,7 +66,6 @@ exports.handler = async (event, context, callback) => {
                 })
             }
         } catch (error) {
-            console.log("errpr ", JSON.stringify(error))
             return {
                 statusCode: 500,
                 body: JSON.stringify({

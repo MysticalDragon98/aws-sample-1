@@ -31,7 +31,13 @@ const updateUserWithGift = async (attribute, dni, value) => {
 
 
 exports.handler = async (event, context, callback) => {
-    if (event?.Records) {
+
+    const queue = event.Records.map((record) => record.body);
+
+
+
+
+    for (const item of queue) {
         const queue = JSON.parse(event?.Records[0].body);
         try {
             const getSeason = d => Math.floor((d.getMonth() / 12 * 4)) % 4
@@ -52,7 +58,7 @@ exports.handler = async (event, context, callback) => {
                     gift = "camisa"
                     break;
             }
-            await updateUserWithGift("gift", queue?.dni, gift);
+            await updateUserWithGift("gift", item?.dni, gift);
             return {
                 statusCode: 200,
                 body: JSON.stringify({
@@ -67,11 +73,7 @@ exports.handler = async (event, context, callback) => {
                 })
             }
         }
+
     }
-    return {
-        statusCode: 400,
-        body: JSON.stringify({
-            message: "Not Authorized"
-        })
-    }
+
 }

@@ -37,6 +37,7 @@ functions:
     environment:
       SQSURLCARD: { Ref : CardQueue}
       SQSURLGIFT: { Ref : GiftQueue}
+      CLIENT_TOPIC: { Ref : CreateTopic}
   card:
     handler: card.handler
     name: ${self:service}-${self:provider.stage}-create-card
@@ -74,6 +75,15 @@ functions:
 
 resources:
   Resources:
+    CreateTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: ${self:service}-${self:provider.stage}-create-topic
+        Subscription:
+          - Protocol: sqs
+            Endpoint: !GetAtt CreateCardQueue.Arn
+          - Protocol: sqs
+            Endpoint: !GetAtt CreateGiftQueue.Arn
     CardQueue:
       Type: "AWS::SQS::Queue"
       Properties:
@@ -97,6 +107,10 @@ resources:
               Action: 
                 - SQS:SendMessage
               Resource: !GetAtt CardQueue.Arn
+              Condition:
+                ArnLike:
+                  aws:SourceArn:
+                    - !Ref CreateTopic
         Queues: 
           - !Ref CardQueue
     
@@ -123,5 +137,9 @@ resources:
               Action: 
                 - SQS:SendMessage
               Resource: !GetAtt GiftQueue.Arn
+              Condition:
+                ArnLike:
+                  aws:SourceArn:
+                    - !Ref CreateTopic
         Queues: 
           - !Ref GiftQueue

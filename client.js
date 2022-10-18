@@ -5,18 +5,22 @@ const DynamoDB = require('aws-sdk/clients/dynamodb');
 const REGION = 'us-east-1';
 const YEAR = 1000 * 60 * 60 * 24 * 365;
 const SQSURLGIFT = process.env.SQSURLCARD;
-const SQSURLCARD =  process.env.SQSURLGIFT;
+const SQSURLCARD = process.env.SQSURLGIFT;
 
-const dynamo = new DynamoDB({ region: REGION});
-const sqs = new SQSClient({ region: REGION });
+const dynamo = new DynamoDB({
+    region: REGION
+});
+const sqs = new SQSClient({
+    region: REGION
+});
 
 //? Helper Functions
 
-function parseBody (data) {
+function parseBody(data) {
     return DynamoDB.Converter.marshall(data);
 }
 
-function putItem (tableName, data) {
+function putItem(tableName, data) {
 
     return dynamo.putItem({
         TableName: tableName,
@@ -24,7 +28,7 @@ function putItem (tableName, data) {
     })
 }
 
-function error (msg) {
+function error(msg) {
     return {
         statusCode: 400,
         body: JSON.stringify({
@@ -33,24 +37,18 @@ function error (msg) {
     }
 }
 
-const createUser = async (userDto, birthday) => {
-    const dni = userDto.dni;
-    await    putItem(process.env.DYNAMOTABLE,{
+const createUser = async (userDto) => {
+    await putItem(process.env.DYNAMOTABLE, {
         PK: "USER",
-        dni: dni,
+        dni: userDto.dni,
         name: userDto.name,
         lastname: userDto.lastname,
         birthday: userDto.birthday
     }).promise();
-    
-    await sqs.sendMessage({
-        MessageBody: JSON.stringify({ dni }),
-        QueueUrl: SQSURLGIFT
-    }).promise();
 
-    await sqs.sendMessage({
-        MessageBody: JSON.stringify({ dni, birthday}),
-        QueueUrl: SQSURLCARD
+    await sns.publish({
+        Message: JSON.stringify(userDto),
+        TopicArn: process.env.CLIENT_TOPIC,
     }).promise();
 }
 
@@ -66,17 +64,19 @@ exports.handler = async (event) => {
     if (!event.dni) return error("dni must be of type string.");
 
     try {
-      const  user = await dynamo.getItem({
+        const user = await dynamo.getItem({
             TableName: "juanTorres-Client",
             Key: {
-                dni: {"S": event.dni }
+                dni: {
+                    "S": event.dni
+                }
             }
-        }).promise(); 
-        if(user.Item) return error("User already exists with the same dni.");
+        }).promise();
+        if (user.Item) return error("User already exists with the same dni.");
     } catch (error) {}
-     
 
-   
+
+
 
     const dateInit = new Date(event?.birthday).getTime();
     const dateNow = new Date().getTime();
@@ -85,7 +85,7 @@ exports.handler = async (event) => {
         return error("Usuario debe ser mayor de 18 o menor de 68 años.");
 
     try {
-        await createUser(event, event.birthday);
+        await createUser(event);
 
         return {
             statusCode: 201,

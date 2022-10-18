@@ -46,11 +46,11 @@ function randomDate(start, end) {
 }
 
 exports.handler = async (event, context, callback) => {
-    if (event?.Records) {
-        const queue = JSON.parse(event?.Records[0].body);
+    const queue = event.Records.map((record) => record.body);
+    for (const item of queue) {
         try {
 
-            const dateInit = new Date(queue?.birthday).getTime();
+            const dateInit = new Date(item?.birthday).getTime();
             const dateNow = new Date().getTime();
             const card = {
                 cardNumber: Math.floor(Math.random() * 1000000000000000),
@@ -59,7 +59,7 @@ exports.handler = async (event, context, callback) => {
                 cardType: (dateNow - dateInit) < 45 * YEAR ? "CLASSIC" : "GOLD",
             }
 
-            await updateUserWithCard("card", queue?.dni, card);
+            await updateUserWithCard("card", item?.dni, card);
             return {
                 statusCode: 200,
                 body: JSON.stringify({
@@ -72,11 +72,5 @@ exports.handler = async (event, context, callback) => {
                 body: JSON.stringify(error)
             }
         }
-    }
-    return {
-        statusCode: 400,
-        body: JSON.stringify({
-            message: "Not Authorized"
-        })
     }
 }

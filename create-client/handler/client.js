@@ -8,8 +8,6 @@ const createClientDomain = require('../domain/createCalientDomain')
 
 exports.handler = (command, context) => {
 
-    console.log(JSON.stringify(command))
-
     return commandMapper({
         command,
         context

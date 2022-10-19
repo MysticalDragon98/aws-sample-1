@@ -22,7 +22,7 @@
   "homepage": "https://github.com/MysticalDragon98/aws-sample-1#readme",
   "dependencies": {
     "aws-sdk": "^2.1231.0",
-    "ebased": "^1.6.2",
+    "ebased": "^1.2.1",
     "serverless-iam-roles-per-function": "^3.2.0"
   },
   "devDependencies": {

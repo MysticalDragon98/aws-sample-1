@@ -5,7 +5,7 @@ const {
     CreateClientValidation
 } = require('../schema/input/createClientValidation');
 const {
-    FaultHandled
+    ErrorHandled
 } = require('ebased/util/error');
 const {
     getClient,
@@ -14,14 +14,13 @@ const {
 const snsService = require('../service/snsService');
 
 module.exports = async (commandPayload, commandMeta) => {
-    console.log("LLEGO HASTA AQUI")
     new CreateClientValidation(commandPayload, commandMeta);
     const validateIfuserExists = await getClient(commandPayload);
-    if (validateIfuserExists) {
-        throw new FaultHandled(`Error user exists!`, {
+    if (validateIfuserExists?.Item) {
+        throw new ErrorHandled(`Error user exists!`, {
             code: 'CREATE_USER',
             layer: 'DOMAIN'
-        });
+        })
     }
 
     const response = await createClient(new createClientCommand({
@@ -37,6 +36,9 @@ module.exports = async (commandPayload, commandMeta) => {
 
 
     return {
-        body: response
+        body: {
+            message: "creaate succesfully",
+            payload: response
+        }
     }
 }

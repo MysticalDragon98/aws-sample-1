@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test:card": "serverless invoke local -f card --path",
-    "test:gift": "serverless invoke local -f gift --path"
+    "test:gift": "serverless invoke local -f gift --path",
+    "test:createClient": "serverless invoke local -f client --path",
+    "start:offline": "serverless offline"
   },
   "repository": {
     "type": "git",
@@ -20,6 +22,10 @@
   "homepage": "https://github.com/MysticalDragon98/aws-sample-1#readme",
   "dependencies": {
     "aws-sdk": "^2.1231.0",
+    "ebased": "^1.6.2",
     "serverless-iam-roles-per-function": "^3.2.0"
+  },
+  "devDependencies": {
+    "serverless-offline": "^8.3.1"
   }
 }

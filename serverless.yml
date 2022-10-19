@@ -2,6 +2,7 @@ service: juanTorres
 
 plugins:
   - serverless-iam-roles-per-function
+  - serverless-offline
 
 provider:
   name: aws
@@ -13,7 +14,7 @@ provider:
 
 functions:
   client:
-    handler: client.handler
+    handler: create-client/handler/client.handler
     name: ${self:service}-${self:provider.stage}-create-client
     iamRoleStatements: 
       - Effect: Allow
@@ -36,7 +37,7 @@ functions:
     environment:
       CLIENT_TOPIC: { Ref : CreateTopic}
   card:
-    handler: card.handler
+    handler: create-card/card.handler
     name: ${self:service}-${self:provider.stage}-create-card
     events:
       - sqs:
@@ -53,7 +54,7 @@ functions:
           - 'arn:aws:dynamodb:us-east-1:*:table/${self:service}-Client'
   
   gift:
-    handler: gift.handler
+    handler: create-gift/gift.handler
     name: ${self:service}-${self:provider.stage}-create-gift
     events:
       - sqs:

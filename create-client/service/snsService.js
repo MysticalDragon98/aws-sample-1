@@ -6,5 +6,8 @@ module.exports = async (getClientCommand) => {
         commandMeta
     } = getClientCommand.get();
 
-    return sns.publish(commandPayload, commandMeta)
+    return sns.publish({
+        Message: JSON.stringify(commandPayload),
+        TopicArn: process.env.CLIENT_TOPIC,
+    }, commandMeta)
 }

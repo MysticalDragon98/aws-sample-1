@@ -35,7 +35,7 @@ exports.handler = async (event, context, callback) => {
     const queue = event.Records.map((record) => JSON.parse(record.body)?.Message);
 
 
-
+    console.log(JSON.stringify(queue));
 
     for (let item of queue) {
         item = JSON.parse(item);

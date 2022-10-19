@@ -1,6 +1,6 @@
 const {
     createClientCommand
-} = require('../command/createClientCommand');
+} = require('../schema/command/createClientCommand');
 const {
     CreateClientValidation
 } = require('../schema/input/createClientValidation');
@@ -14,6 +14,7 @@ const {
 const snsService = require('../service/snsService');
 
 module.exports = async (commandPayload, commandMeta) => {
+    console.log("LLEGO HASTA AQUI")
     new CreateClientValidation(commandPayload, commandMeta);
     const validateIfuserExists = await getClient(commandPayload);
     if (validateIfuserExists) {

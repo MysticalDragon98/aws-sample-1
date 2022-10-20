@@ -1,0 +1,307 @@
+{
+	"info": {
+		"_postman_id": "256ddb9c-cd4f-4167-bf82-248c4db256d7",
+		"name": "Naranjax",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Client crud",
+			"item": [
+				{
+					"name": "Create Client",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"dni\": \"1010089676\",\r\n    \"name\": \"Camilo Ses\",\r\n    \"lastname\": \"  torres\",\r\n    \"birthday\": \"06/04/1985\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/client",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"client"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Client",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/client/:dni",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"client",
+								":dni"
+							],
+							"variable": [
+								{
+									"key": "dni",
+									"value": "1010089676"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Client",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/client/:dni",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"client",
+								":dni"
+							],
+							"variable": [
+								{
+									"key": "dni",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Client",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"birthday\": \"06/11/1984\",\r\n    \"name\":\"Felipe\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/client/:dni",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"client",
+								":dni"
+							],
+							"variable": [
+								{
+									"key": "dni",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Product",
+			"item": [
+				{
+					"name": "get purcharse",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrlLocal}}/product/:productId/userdni/:dni",
+							"host": [
+								"{{baseUrlLocal}}"
+							],
+							"path": [
+								"product",
+								":productId",
+								"userdni",
+								":dni"
+							],
+							"variable": [
+								{
+									"key": "productId",
+									"value": "a8cf3612-1b24-40f3-80d7-8a2dab59b039"
+								},
+								{
+									"key": "dni",
+									"value": "145010100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete purchase",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrlLocal}}/product/:productId/userdni/:dni",
+							"host": [
+								"{{baseUrlLocal}}"
+							],
+							"path": [
+								"product",
+								":productId",
+								"userdni",
+								":dni"
+							],
+							"variable": [
+								{
+									"key": "productId",
+									"value": "a8cf3612-1b24-40f3-80d7-8a2dab59b039"
+								},
+								{
+									"key": "dni",
+									"value": "145010100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create  purcharse",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"dni\": \"1010089676\",\r\n    \"products\": [{ \"name\":\"Juice\", \"price\":234}, { \"name\":\"TV \", \"price\":546}]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/product",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update purcharse",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"products\": [{ \"name\":\"Juice\", \"price\":234}]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrlLocal}}/product/:productId/userdni/:dni",
+							"host": [
+								"{{baseUrlLocal}}"
+							],
+							"path": [
+								"product",
+								":productId",
+								"userdni",
+								":dni"
+							],
+							"variable": [
+								{
+									"key": "productId",
+									"value": "a8cf3612-1b24-40f3-80d7-8a2dab59b039"
+								},
+								{
+									"key": "dni",
+									"value": "145010100"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://mjlg06idda.execute-api.us-east-1.amazonaws.com/dev",
+			"type": "default"
+		},
+		{
+			"key": "baseUrlLocal",
+			"value": " http://localhost:3000/dev",
+			"type": "default"
+		}
+	]
+}

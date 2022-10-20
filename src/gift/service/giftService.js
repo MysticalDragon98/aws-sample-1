@@ -11,7 +11,7 @@ const updateUserWithGift = async (getClientCommand) => {
         eventPayload
     } = getClientCommand.get();
     const params = {
-        TableName: process.env.DYNAMOTABLE,
+        TableName: process.env.DYNAMOTABLECLIENT,
         Key: {
             PK: "USER",
             dni: eventPayload.dni

@@ -11,7 +11,7 @@ const updateUserWithCard = async (getCardCommand) => {
         eventPayload
     } = getCardCommand.get();
     const params = {
-        TableName: process.env.DYNAMOTABLE,
+        TableName: process.env.DYNAMOTABLECLIENT,
         Key: {
             PK: "USER",
             dni: eventPayload.dni

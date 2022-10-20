@@ -6,7 +6,8 @@
   "scripts": {
     "test:card": "serverless invoke local -f card --path",
     "test:gift": "serverless invoke local -f gift --path",
-    "test:createClient": "serverless invoke local -f client --path",
+    "test:createClient": "serverless invoke local -f get --path",
+    "test:product": "serverless invoke local -f product --path",
     "start": "serverless offline",
     "deploy": "serverless deploy --verbose"
   },
@@ -25,6 +26,7 @@
     "aws-sdk": "^2.1231.0",
     "ebased": "^1.6.2",
     "serverless-iam-roles-per-function": "^3.2.0",
+    "uuidv4": "^6.2.13",
     "yaml-js": "^0.3.1"
   },
   "devDependencies": {

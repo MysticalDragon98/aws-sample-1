@@ -10,13 +10,25 @@ provider:
   runtime: nodejs14.x
   stage: ${opt:stage, 'dev'}
   environment:
-    DYNAMOTABLE: ${self:service}-Client
+    DYNAMOTABLECLIENT: ${self:service}-Client
+    DYNAMOTABLEPRODUCT: ${self:service}-Product
     cardQueueArn: !GetAtt CardQueue.Arn
     giftQueueArn: !GetAtt GiftQueue.Arn
     topicServ: !Ref CreateTopic
+    SERVICENAME: ${self:service}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - xray:PutTraceSegments
+        - xray:PutTelemetryRecords
+      Resource: '*'
 
-functions: ${file(serverless-dynamic-complete.js)}
- 
+functions: 
+  - ${file(src/client/config.yml)}
+  - ${file(src/product/config.yml)}
+  - ${file(src/card/config.yml)}
+  - ${file(src/gift/config.yml)}
+
 
 resources:
   Resources:

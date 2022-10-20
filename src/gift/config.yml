@@ -1,5 +1,6 @@
 gift:
   name: ${self:service}-${self:provider.stage}-create-gift
+  handler: src/gift/handler/index.handler
   events:
     - sqs:
         arn: ${self:provider.environment.giftQueueArn}

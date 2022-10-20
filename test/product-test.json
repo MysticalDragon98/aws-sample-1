@@ -1,0 +1,82 @@
+{
+    "body": "{\r\n    \"dni\": \"145010100\",\r\n    \"name\": \"Juanca\",\r\n    \"lastname\": \" milo torres\",\r\n    \"birthday\": \"06/04/1997\"\r\n}",
+    "headers": {
+      "Content-Type": "application/json",
+      "User-Agent": "PostmanRuntime/7.29.2",
+      "Accept": "*/*",
+      "Postman-Token": "301a3a52-e52b-4dea-9666-841932bd8dd3",
+      "Host": "localhost:3000",
+      "Accept-Encoding": "gzip, deflate, br",
+      "Connection": "keep-alive",
+      "Content-Length": "116"
+    },
+    "httpMethod": "POST",
+    "isBase64Encoded": false,
+    "multiValueHeaders": {
+      "Content-Type": [
+        "application/json"
+      ],
+      "User-Agent": [
+        "PostmanRuntime/7.29.2"
+      ],
+      "Accept": [
+        "*/*"
+      ],
+      "Postman-Token": [
+        "301a3a52-e52b-4dea-9666-841932bd8dd3"
+      ],
+      "Host": [
+        "localhost:3000"
+      ],
+      "Accept-Encoding": [
+        "gzip, deflate, br"
+      ],
+      "Connection": [
+        "keep-alive"
+      ],
+      "Content-Length": [
+        "116"
+      ]
+    },
+    "multiValueQueryStringParameters": null,
+    "path": "/client",
+    "pathParameters": null,
+    "queryStringParameters": null,
+    "requestContext": {
+      "accountId": "offlineContext_accountId",
+      "apiId": "offlineContext_apiId",
+      "authorizer": {
+        "principalId": "offlineContext_authorizer_principalId"
+      },
+      "domainName": "offlineContext_domainName",
+      "domainPrefix": "offlineContext_domainPrefix",
+      "extendedRequestId": "cl9fa5hxh000314ts7qak8r6t",
+      "httpMethod": "POST",
+      "identity": {
+        "accessKey": null,
+        "accountId": "offlineContext_accountId",
+        "apiKey": "offlineContext_apiKey",
+        "apiKeyId": "offlineContext_apiKeyId",
+        "caller": "offlineContext_caller",
+        "cognitoAuthenticationProvider": "offlineContext_cognitoAuthenticationProvider",
+        "cognitoAuthenticationType": "offlineContext_cognitoAuthenticationType",
+        "cognitoIdentityId": "offlineContext_cognitoIdentityId",
+        "cognitoIdentityPoolId": "offlineContext_cognitoIdentityPoolId",
+        "principalOrgId": null,
+        "sourceIp": "127.0.0.1",
+        "user": "offlineContext_user",
+        "userAgent": "PostmanRuntime/7.29.2",
+        "userArn": "offlineContext_userArn"
+      },
+      "path": "/client",
+      "protocol": "HTTP/1.1",
+      "requestId": "cl9fa5hxh000414ts0tp19beb",
+      "requestTime": "19/Oct/2022:01:55:32 -0500",
+      "requestTimeEpoch": 1666162532349,
+      "resourceId": "offlineContext_resourceId",
+      "resourcePath": "/dev/client",
+      "stage": "dev"
+    },
+    "resource": "/client",
+    "stageVariables": null
+  }

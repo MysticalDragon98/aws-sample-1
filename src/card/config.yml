@@ -1,5 +1,6 @@
 card:
   name: ${self:service}-${self:provider.stage}-create-card
+  handler: src/card/handler/index.handler
   events:
     - sqs:
         arn: ${self:provider.environment.cardQueueArn}

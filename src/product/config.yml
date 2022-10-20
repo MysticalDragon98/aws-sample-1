@@ -1,0 +1,117 @@
+create-purchase:
+    name: ${self:service}-${self:provider.stage}-create-product
+    handler: src/product/handler/create.handler
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+          - dynamodb:GetItem
+          - dynamodb:UpdateItem
+        Resource:
+          - "arn:aws:dynamodb:us-east-1:*:table/${self:service}-Client"
+          - "arn:aws:dynamodb:us-east-1:*:table/${self:service}-Product"
+
+    environment:
+      ENVIRONMENT: ${self:provider.stage}
+    events:
+      - httpApi:
+          path: /${self:provider.stage}/product
+          method: post
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Amzn-Trace-Id
+            allowCredentials: false
+get-purchase:
+    name: ${self:service}-${self:provider.stage}-get-product
+    handler: src/product/handler/get.handler
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:GetItem
+        Resource:
+          - "arn:aws:dynamodb:us-east-1:*:table/${self:service}-Client"
+          - "arn:aws:dynamodb:us-east-1:*:table/${self:service}-Product"
+
+    environment:
+      ENVIRONMENT: ${self:provider.stage}
+    events:
+      - httpApi:
+          path: /${self:provider.stage}/product/{productId}/userdni/{dni}
+          method: get
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Amzn-Trace-Id
+            allowCredentials: false
+
+update-purchase:
+    name: ${self:service}-${self:provider.stage}-update-product
+    handler: src/product/handler/update.handler
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:GetItem
+          - dynamodb:UpdateItem
+        Resource:
+          - "arn:aws:dynamodb:us-east-1:*:table/${self:service}-Client"
+          - "arn:aws:dynamodb:us-east-1:*:table/${self:service}-Product"
+
+    environment:
+      ENVIRONMENT: ${self:provider.stage}
+    events:
+      - httpApi:
+          path: /${self:provider.stage}/product/{productId}/userdni/{dni}
+          method: put
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Amzn-Trace-Id
+            allowCredentials: false
+delete-purchase:
+    name: ${self:service}-${self:provider.stage}-delete-product
+    handler: src/product/handler/delete.handler
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:GetItem
+          - dynamodb:UpdateItem
+        Resource:
+          - "arn:aws:dynamodb:us-east-1:*:table/${self:service}-Client"
+          - "arn:aws:dynamodb:us-east-1:*:table/${self:service}-Product"
+
+    environment:
+      ENVIRONMENT: ${self:provider.stage}
+    events:
+      - httpApi:
+          path: /${self:provider.stage}/product/{productId}/userdni/{dni}
+          method: delete
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Amzn-Trace-Id
+            allowCredentials: false

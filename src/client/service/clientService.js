@@ -9,7 +9,7 @@ const createClient = async (createPayload) => {
         commandPayload
     } = createPayload.get();
     await dynamo.putItem({
-        TableName: process.env.DYNAMOTABLE,
+        TableName: process.env.DYNAMOTABLECLIENT,
         Item: {
             PK:"USER",
             ...commandPayload,
@@ -28,7 +28,7 @@ const createClient = async (createPayload) => {
 
 const getClient = async (dni) => {
     const params = {
-        TableName: process.env.DYNAMOTABLE,
+        TableName: process.env.DYNAMOTABLECLIENT,
         Key: {
             PK: "USER",
             dni
@@ -74,7 +74,7 @@ const updateClient = async (dni, { commandPayload }) => {
 
 
     const params = {
-        TableName: process.env.DYNAMOTABLE,
+        TableName: process.env.DYNAMOTABLECLIENT,
         Key: {
             PK: "USER",
             dni: dni
@@ -97,7 +97,7 @@ const updateClient = async (dni, { commandPayload }) => {
 
 const deleteClient = async (dni) => {
     const params = {
-        TableName: process.env.DYNAMOTABLE,
+        TableName: process.env.DYNAMOTABLECLIENT,
         Key: {
             PK: "USER",
             dni

@@ -11,26 +11,29 @@ const getClientDomain = require('../domain/getClientDomain');
 const PatchClientDomain = require('../domain/updateClientDomain');
 
 exports.handler = (command, context) => {
-    if (command?.routeKey === `POST /${process.env.ENVIRONMENT}/client`) {
+
+    console.log(JSON.stringify(command))
+
+    if ([`${command?.routeKey}`, `${command?.httpMethod} ${command?.resource}`].includes(`POST /${process.env.ENVIRONMENT}/client`)) {
         return commandMapper({
             command,
             context
         }, inputMode, createClientDomain, outputMode);
     }
 
-    if (command?.routeKey === `GET /${process.env.ENVIRONMENT}/client/{dni}`) {
+    if ([`${command?.routeKey}`, `${command?.httpMethod} ${command?.resource}`].includes(`GET /${process.env.ENVIRONMENT}/client/{dni}`)) {
         return commandMapper({
             command,
             context
         }, inputMode, getClientDomain, outputMode);
     }
-    if (command?.routeKey === `PATCH /${process.env.ENVIRONMENT}/client/{dni}`) {
+    if ([`${command?.routeKey}`, `${command?.httpMethod} ${command?.resource}`].includes(`PATCH /${process.env.ENVIRONMENT}/client/{dni)}`)) {
         return commandMapper({
             command,
             context
         }, inputMode, PatchClientDomain, outputMode);
     }
-    if (command?.routeKey === `DELETE /${process.env.ENVIRONMENT}/client/{dni}`) {
+    if ([`${command?.routeKey}`, `${command?.httpMethod} ${command?.resource}`].includes(`DELETE /${process.env.ENVIRONMENT}/client/{dni}`)) {
         return commandMapper({
             command,
             context

@@ -13,8 +13,8 @@ class createCardCommand extends DownstreamEvent {
                     type: String,
                     required: true
                 },
-                gift: {
-                    type: String,
+                card: {
+                    type: Object,
                     required: true
                 },
             },

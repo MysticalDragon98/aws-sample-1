@@ -19,7 +19,7 @@ class createCardCommand extends DownstreamEvent {
                 },
             },
             responseSchema: {
-                gift: {
+                card: {
                     type: String,
                     required: true
                 },

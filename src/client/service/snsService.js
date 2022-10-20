@@ -8,6 +8,6 @@ module.exports = async (getClientCommand) => {
 
     return sns.publish({
         Message: commandPayload,
-        TopicArn: "arn:aws:sns:us-east-1:610955275297:juanTorres-dev-create-topic" // process.env.CLIENT_TOPIC,
+        TopicArn : process.env.CLIENT_TOPIC,
     }, commandMeta)
 }

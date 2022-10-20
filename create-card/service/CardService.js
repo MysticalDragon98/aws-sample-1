@@ -1,28 +1,27 @@
-const DynamoDB = require('aws-sdk/clients/dynamodb');
 const dynamo = require('ebased/service/storage/dynamo');
 const {
     ErrorHandled
 } = require('ebased/util/error');
 const {
-    getGiftByuser
+    getCardByuser
 } = require('../helper');
 
-const updateUserWithGift = async (getClientCommand) => {
+const updateUserWithCard = async (getCardCommand) => {
     const {
         eventPayload
-    } = getClientCommand.get();
+    } = getCardCommand.get();
     const params = {
         TableName: process.env.DYNAMOTABLE,
         Key: {
             PK: "USER",
             dni: eventPayload.dni
         },
-        UpdateExpression: `set #gift = :gift`,
+        UpdateExpression: `set #card = :card`,
         ExpressionAttributeNames: {
-            '#gift': 'gift'
+            '#card': 'card'
         },
         ExpressionAttributeValues: {
-            ':gift': getGiftByuser()
+            ':card': getCardByuser(eventPayload?.birthday)
         },
     }
     return dynamo.updateItem(params).catch(err => {
@@ -32,5 +31,5 @@ const updateUserWithGift = async (getClientCommand) => {
 
 
 module.exports = {
-    updateUserWithGift
+    updateUserWithCard
 }

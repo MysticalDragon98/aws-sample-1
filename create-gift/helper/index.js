@@ -1,4 +1,4 @@
-export const getGiftByuser = ()=> {
+ const getGiftByuser = ()=> {
     const getSeason = d => Math.floor((d.getMonth() / 12 * 4)) % 4
     const season = ['Summer', 'Autumn', 'Winter', 'Spring'][getSeason(new Date())];
 
@@ -19,3 +19,6 @@ export const getGiftByuser = ()=> {
     }
     return gift;
 }
+
+
+module.exports = { getGiftByuser  }

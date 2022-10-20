@@ -2,10 +2,10 @@ const {
     InputValidation
 } = require('ebased/schema/inputValidation');
 
-class CreateGiftValidation extends InputValidation {
+class CreateCardValidation extends InputValidation {
     constructor(payload, meta) {
         super({
-            type: 'GIFT.CREATE',
+            type: 'CARD.CREATE',
             specversion: 'v1.0.0',
             source: meta.source,
             payload: payload,
@@ -33,5 +33,5 @@ class CreateGiftValidation extends InputValidation {
 }
 
 module.exports = {
-    CreateGiftValidation
+    CreateCardValidation
 };

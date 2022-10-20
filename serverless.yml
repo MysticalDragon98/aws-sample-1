@@ -48,7 +48,7 @@ functions:
     environment:
       CLIENT_TOPIC: { Ref : CreateTopic}
   card:
-    handler: create-card/card.handler
+    handler: create-card/handler/card.handler
     name: ${self:service}-${self:provider.stage}-create-card
     events:
       - sqs:
@@ -65,7 +65,7 @@ functions:
           - 'arn:aws:dynamodb:us-east-1:*:table/${self:service}-Client'
   
   gift:
-    handler: create-gift/gift.handler
+    handler: create-gift/handler/gift.handler
     name: ${self:service}-${self:provider.stage}-create-gift
     events:
       - sqs:

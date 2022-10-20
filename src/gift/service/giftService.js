@@ -1,4 +1,3 @@
-const DynamoDB = require('aws-sdk/clients/dynamodb');
 const dynamo = require('ebased/service/storage/dynamo');
 const {
     ErrorHandled
@@ -22,7 +21,7 @@ const updateUserWithGift = async (getClientCommand) => {
             '#gift': 'gift'
         },
         ExpressionAttributeValues: {
-            ':gift': getGiftByuser()
+            ':gift': getGiftByuser(eventPayload.birthday)
         },
     }
     return dynamo.updateItem(params).catch(err => {

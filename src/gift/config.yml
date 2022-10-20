@@ -1,0 +1,16 @@
+gift:
+  name: ${self:service}-${self:provider.stage}-create-gift
+  events:
+    - sqs:
+        arn: ${self:provider.environment.giftQueueArn}
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "sqs:ReceiveMessage"
+      Resource:
+        - ${self:provider.environment.giftQueueArn}
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:UpdateItem"
+      Resource:
+        - "arn:aws:dynamodb:us-east-1:*:table/${self:service}-Client"

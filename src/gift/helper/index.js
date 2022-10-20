@@ -1,6 +1,6 @@
- const getGiftByuser = ()=> {
+ const getGiftByuser = (birthday)=> {
     const getSeason = d => Math.floor((d.getMonth() / 12 * 4)) % 4
-    const season = ['Summer', 'Autumn', 'Winter', 'Spring'][getSeason(new Date())];
+    const season = ['Summer', 'Autumn', 'Winter', 'Spring'][getSeason(new Date(birthday))];
 
     let gift = '';
     switch (season) {

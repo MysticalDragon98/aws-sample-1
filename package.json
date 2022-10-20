@@ -24,7 +24,8 @@
   "dependencies": {
     "aws-sdk": "^2.1231.0",
     "ebased": "^1.6.2",
-    "serverless-iam-roles-per-function": "^3.2.0"
+    "serverless-iam-roles-per-function": "^3.2.0",
+    "yaml-js": "^0.3.1"
   },
   "devDependencies": {
     "serverless-offline": "^8.3.1"

@@ -1,0 +1,15 @@
+card:
+  name: ${self:service}-${self:provider.stage}-create-card
+  events:
+    - sqs:
+        arn: ${self:provider.environment.cardQueueArn}
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "sqs:ReceiveMessage"
+      Resource: ${self:provider.environment.cardQueueArn}
+    - Effect: "Allow"
+      Action:
+        - "dynamodb:UpdateItem"
+      Resource:
+        - "arn:aws:dynamodb:us-east-1:*:table/${self:service}-Client"

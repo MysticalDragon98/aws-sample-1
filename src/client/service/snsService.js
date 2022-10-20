@@ -5,9 +5,9 @@ module.exports = async (getClientCommand) => {
         commandPayload,
         commandMeta
     } = getClientCommand.get();
-    delete commandPayload?.PK
+
     return sns.publish({
         Message: commandPayload,
-        TopicArn: process.env.CLIENT_TOPIC,
+        TopicArn: "arn:aws:sns:us-east-1:610955275297:juanTorres-dev-create-topic" // process.env.CLIENT_TOPIC,
     }, commandMeta)
 }

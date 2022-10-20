@@ -11,76 +11,12 @@ provider:
   stage: ${opt:stage, 'dev'}
   environment:
     DYNAMOTABLE: ${self:service}-Client
+    cardQueueArn: !GetAtt CardQueue.Arn
+    giftQueueArn: !GetAtt GiftQueue.Arn
+    topicServ: !Ref CreateTopic
 
-functions:
-  client:
-    handler: create-client/handler/client.handler
-    name: ${self:service}-${self:provider.stage}-create-client
-    iamRoleStatements: 
-      - Effect: Allow
-        Action:
-          - sns:Publish
-        Resource:
-          - !Ref CreateTopic
-      - Effect: Allow
-        Action:
-          - dynamodb:PutItem
-          - dynamodb:GetItem
-        Resource:
-          - 'arn:aws:dynamodb:us-east-1:*:table/${self:service}-Client'
-    events:
-      - http:
-          path: /client
-          method: post
-          cors:
-          origin: '*'
-          headers:
-            - Content-Type
-            - X-Amz-Date
-            - Authorization
-            - X-Api-Key
-            - X-Amz-Security-Token
-            - X-Amz-User-Agent
-            - X-Amzn-Trace-Id
-          allowCredentials: false
-
-        
-    environment:
-      CLIENT_TOPIC: { Ref : CreateTopic}
-  card:
-    handler: create-card/handler/card.handler
-    name: ${self:service}-${self:provider.stage}-create-card
-    events:
-      - sqs:
-          arn: !GetAtt CardQueue.Arn
-    iamRoleStatements:
-      - Effect: "Allow"
-        Action:
-          - "sqs:ReceiveMessage"
-        Resource: !GetAtt CardQueue.Arn
-      - Effect: 'Allow'
-        Action:
-          - 'dynamodb:UpdateItem'
-        Resource:
-          - 'arn:aws:dynamodb:us-east-1:*:table/${self:service}-Client'
-  
-  gift:
-    handler: create-gift/handler/gift.handler
-    name: ${self:service}-${self:provider.stage}-create-gift
-    events:
-      - sqs:
-          arn: !GetAtt GiftQueue.Arn
-    iamRoleStatements:
-      - Effect: "Allow"
-        Action:
-          - "sqs:ReceiveMessage"
-        Resource: 
-          - !GetAtt GiftQueue.Arn
-      - Effect: 'Allow'
-        Action:
-          - 'dynamodb:UpdateItem'
-        Resource:
-          - 'arn:aws:dynamodb:us-east-1:*:table/${self:service}-Client'
+functions: ${file(serverless-dynamic-complete.js)}
+ 
 
 resources:
   Resources:
@@ -100,11 +36,11 @@ resources:
         QueueName: ${self:service}-cardqueue
     CardQueuePolicy:
       Type: AWS::SQS::QueuePolicy
-      Properties: 
-        PolicyDocument: 
+      Properties:
+        PolicyDocument:
           Statement:
             - Effect: Allow
-              Action: 
+              Action:
                 - SQS:*
               Resource: !GetAtt CardQueue.Arn
               Principal:
@@ -112,29 +48,29 @@ resources:
                   - !Ref AWS::AccountId
             - Effect: Allow
               Principal:
-                AWS: 
-                  - '*'
-              Action: 
+                AWS:
+                  - "*"
+              Action:
                 - SQS:SendMessage
               Resource: !GetAtt CardQueue.Arn
               Condition:
                 ArnLike:
                   aws:SourceArn:
                     - !Ref CreateTopic
-        Queues: 
+        Queues:
           - !Ref CardQueue
-    
+
     GiftQueue:
       Type: "AWS::SQS::Queue"
       Properties:
         QueueName: ${self:service}-giftqueue
     GiftQueuePolicy:
       Type: AWS::SQS::QueuePolicy
-      Properties: 
-        PolicyDocument: 
+      Properties:
+        PolicyDocument:
           Statement:
             - Effect: Allow
-              Action: 
+              Action:
                 - SQS:*
               Resource: !GetAtt GiftQueue.Arn
               Principal:
@@ -142,14 +78,18 @@ resources:
                   - !Ref AWS::AccountId
             - Effect: Allow
               Principal:
-                AWS: 
-                  - '*'
-              Action: 
+                AWS:
+                  - "*"
+              Action:
                 - SQS:SendMessage
               Resource: !GetAtt GiftQueue.Arn
               Condition:
                 ArnLike:
                   aws:SourceArn:
                     - !Ref CreateTopic
-        Queues: 
+        Queues:
           - !Ref GiftQueue
+
+custom:
+  webpackIncludeModules: true
+  stage: "${opt:stage, self:provider.stage}"

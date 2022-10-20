@@ -10,14 +10,6 @@ class CreateGiftValidation extends InputValidation {
             source: meta.source,
             payload: payload,
             schema: {
-                name: {
-                    type: String,
-                    required: true
-                },
-                lastname: {
-                    type: String,
-                    required: true
-                },
                 dni: {
                     type: String,
                     required: true

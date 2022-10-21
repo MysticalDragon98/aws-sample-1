@@ -14,43 +14,38 @@ const {
 const snsService = require('../service/snsService');
 
 module.exports = async (commandPayload, commandMeta) => {
-
-
-
     new UpdateCLientValidation(commandPayload, commandMeta);
+    
     const {
         dni,
         ...payload
     } = commandPayload;
     const validateIfuserExists = await getClient(dni);
     if (!validateIfuserExists) {
-        throw new ErrorHandled(`User not exists.`, {
-            code: 'UPDATE_USER',
+        throw new ErrorHandled(`User not found.`, {
+			code: 'USER_NOT_FOUND'
         })
     }
 
     if (validateIfuserExists?.delete) {
-        throw new ErrorHandled(`User was deleted!`, {
-            code: 'UPDATE_USER',
+        throw new ErrorHandled(`User not found.`, {
+			code: 'USER_NOT_FOUND'
         })
     }
 
 
-    const validationPayloadCommand = new updateClientCommand(payload, commandMeta);
+    const validationPayloadCommand = new UpdateClientCommand(payload, commandMeta);
 
     const response = await updateClient(dni, validationPayloadCommand.get());
 
     validationPayloadCommand.validateResponse(response);
 
     if(payload?.birthday){
-        await snsService(new snsClientCommand({
+        await snsService(new SnsClientCommand({
             dni: commandPayload?.dni,
             birthday: response?.birthday
         }, commandMeta))
     }
-
-
-
 
     return {
         body: response

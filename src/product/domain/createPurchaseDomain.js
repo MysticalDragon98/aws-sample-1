@@ -16,14 +16,14 @@ module.exports = async (commandPayload, commandMeta) => {
     new CreateProductValidation(commandPayload, commandMeta);
     const user = await getClient(commandPayload?.dni);
     if (!user) {
-        throw new ErrorHandled(`User not exists.`, {
-            code: 'UPDATE_USER',
+        throw new ErrorHandled(`User not found.`, {
+			code: 'USER_NOT_FOUND'
         })
     }
 
     if (user?.delete) {
-        throw new ErrorHandled(`User was deleted!`, {
-            code: 'GET_USER',
+        throw new ErrorHandled(`User not found.`, {
+			code: 'USER_NOT_FOUND'
         })
     }
 
@@ -31,16 +31,16 @@ module.exports = async (commandPayload, commandMeta) => {
         ...product,
         finalPrice: getfinalPrice(user?.card?.cardType, product?.price)
     }))
-    const Total_value = products.reduce((acc, cur) => acc + cur?.finalPrice, 0)
 
+    const totalValue = products.reduce((acc, cur) => acc + cur?.finalPrice, 0)
     
     const purchase = await createPurchase({
         products,
         dni: user.dni,
-        Total_value
+        totalValue
     })
 
-    await updatePoints(commandPayload?.dni, Math.floor(Total_value / 200))
+    await updatePoints(commandPayload?.dni, (user.points ?? 0) + Math.floor(totalValue / 200))
 
     return {
         body: {

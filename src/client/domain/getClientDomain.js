@@ -18,8 +18,8 @@ module.exports = async (commandPayloadX, commandMeta) => {
     const { commandPayload  } = getClientCommand.get()
     const client = await getClient(commandPayload?.dni)
     if (client?.delete) {
-        throw new ErrorHandled(`User was deleted!`, {
-            code: 'GET_USER',
+        throw new ErrorHandled(`User not found.`, {
+			code: 'USER_NOT_FOUND'
         })
     }
     getClientCommand.validateResponse(client);

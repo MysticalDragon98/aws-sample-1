@@ -16,7 +16,7 @@ module.exports = async (commandPayload, commandMeta) => {
 
     return {
         body: {
-            message: "creaate succesfully",
+            message: "create succesfully",
             payload: response
         }
     }

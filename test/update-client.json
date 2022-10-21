@@ -1,0 +1,45 @@
+{
+    "version": "2.0",
+    "routeKey": "PATCH /dev/client/{dni}",
+    "rawPath": "/dev/client/1010089677",
+    "rawQueryString": "",
+    "cookies": [],
+    "headers": {
+      "content-type": "application/json",
+      "user-agent": "PostmanRuntime/7.29.2",
+      "accept": "*/*",
+      "cache-control": "no-cache",
+      "postman-token": "5f68c848-c729-49fa-a020-992a982af8e5",
+      "host": "localhost:3000",
+      "accept-encoding": "gzip, deflate, br",
+      "connection": "keep-alive",
+      "content-length": "56"
+    },
+    "queryStringParameters": null,
+    "requestContext": {
+      "accountId": "offlineContext_accountId",
+      "apiId": "offlineContext_apiId",
+      "authorizer": {
+        "jwt": {}
+      },
+      "domainName": "offlineContext_domainName",
+      "domainPrefix": "offlineContext_domainPrefix",
+      "http": {
+        "method": "PATCH",
+        "path": "/dev/client/1010089677",
+        "protocol": "HTTP/1.1",
+        "sourceIp": "127.0.0.1",
+        "userAgent": "PostmanRuntime/7.29.2"
+      },
+      "requestId": "offlineContext_resourceId",
+      "routeKey": "PATCH /dev/client/{dni}",
+      "stage": "$default",
+      "time": "21/Oct/2022:12:32:00 -0400",
+      "timeEpoch": 1666369920145
+    },
+    "body": "{\r\n    \"birthday\": \"06/05/1984\",\r\n    \"name\":\"Felipe\"\r\n}",
+    "pathParameters": {
+      "dni": "1010089677"
+    },
+    "isBase64Encoded": false
+  }

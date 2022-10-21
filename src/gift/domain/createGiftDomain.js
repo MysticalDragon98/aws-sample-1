@@ -9,14 +9,18 @@ const {
 } = require('../service/giftService');
 
 module.exports = async (commandPayload, commandMeta) => {
-    const payload = JSON.parse(commandPayload.Message);
+    const _payload = JSON.parse(commandPayload.Message);
+    const payload = {
+        dni: _payload.dni,
+        birthday: _payload.birthday
+    };
     new CreateGiftValidation(payload, commandMeta);
 
     const response = await updateUserWithGift(new createGiftCommand(payload, commandMeta));
 
     return {
         body: {
-            message: "creaate succesfully",
+            message: "succesfully created",
             payload: response
         }
     }

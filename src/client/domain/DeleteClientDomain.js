@@ -11,9 +11,6 @@ const {
 } = require('../service/clientService');
 
 module.exports = async (commandPayloadX, commandMeta) => {
-
-     
-
     const getClientCommand = new DeleteClientCommand(commandPayloadX, commandMeta);
 
     const {
@@ -22,14 +19,14 @@ module.exports = async (commandPayloadX, commandMeta) => {
 
     const validateIfuserExists = await getClient(commandPayload?.dni);
     if (!validateIfuserExists) {
-        throw new ErrorHandled(`User not exists.`, {
-            code: 'DELETE_USER',
+        throw new ErrorHandled(`User not found.`, {
+			code: 'USER_NOT_FOUND'
         })
     }
 
     if (validateIfuserExists?.delete) {
-        throw new ErrorHandled(`User was deleted!`, {
-            code: 'DELETE_USER',
+        throw new ErrorHandled(`User is already deleted!`, {
+            code: 'USER_ALREADY_DELETED',
         })
     }
 

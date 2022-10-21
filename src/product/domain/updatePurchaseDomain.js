@@ -16,14 +16,14 @@ module.exports = async (commandPayload, commandMeta) => {
     new UpdateProductValidation(commandPayload, commandMeta);
     const user = await getClient(commandPayload?.dni);
     if (!user) {
-        throw new ErrorHandled(`User not exists.`, {
-            code: 'UPDATE_USER',
+        throw new ErrorHandled(`User not found.`, {
+			code: 'USER_NOT_FOUND'
         })
     }
 
     if (user?.delete) {
-        throw new ErrorHandled(`User was deleted!`, {
-            code: 'GET_USER',
+        throw new ErrorHandled(`User not found.`, {
+			code: 'USER_NOT_FOUND'
         })
     }
 
@@ -34,7 +34,7 @@ module.exports = async (commandPayload, commandMeta) => {
         })
     }
     if (purcharse?.delete) {
-        throw new ErrorHandled(`Purchase was deleted!`, {
+        throw new ErrorHandled(`Purchase not found.`, {
             status: 400
         })
     }

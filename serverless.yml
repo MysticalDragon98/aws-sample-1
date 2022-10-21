@@ -2,6 +2,7 @@ service: juanTorres
 
 plugins:
   - serverless-iam-roles-per-function
+  - serverless-plugin-tracing
   - serverless-offline
 
 provider:

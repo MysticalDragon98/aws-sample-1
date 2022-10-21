@@ -78,8 +78,8 @@ update-client:
           - ${self:provider.environment.topicServ}
       - Effect: Allow
         Action:
-          - dynamodb:PutItem
           - dynamodb:GetItem
+          - dynamodb:UpdateItem
         Resource:
           - "arn:aws:dynamodb:us-east-1:*:table/${self:service}-Client"
     environment:
@@ -112,7 +112,7 @@ delete-client:
           - ${self:provider.environment.topicServ}
       - Effect: Allow
         Action:
-          - dynamodb:PutItem
+          - dynamodb:UpdateItem
           - dynamodb:GetItem
         Resource:
           - "arn:aws:dynamodb:us-east-1:*:table/${self:service}-Client"

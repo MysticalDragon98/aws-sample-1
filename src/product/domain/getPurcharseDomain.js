@@ -14,13 +14,13 @@ module.exports = async (commandPayloadX, commandMeta) => {
 
     const user = await getClient(commandPayloadX?.dni);
     if (!user) {
-        throw new ErrorHandled(`User not exists.`, {
+        throw new ErrorHandled(`User not found.`, {
 
         })
     }
 
     if (user?.delete) {
-        throw new ErrorHandled(`User was deleted!`, {
+        throw new ErrorHandled(`User not found.`, {
 
         })
     }
@@ -28,7 +28,7 @@ module.exports = async (commandPayloadX, commandMeta) => {
     const purcharse = await getPurcharse(commandPayloadX?.productId, commandPayloadX?.dni, user);
 
     if (purcharse?.delete) {
-        throw new ErrorHandled(`Purchase was deleted!`, {
+        throw new ErrorHandled(`Purchase not found.`, {
 
         })
     }

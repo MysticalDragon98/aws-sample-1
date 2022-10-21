@@ -4,14 +4,14 @@ const {
 } = require('ebased/util/error');
 
 const createClient = async (createPayload) => {
-   
+
     const {
         commandPayload
     } = createPayload.get();
     await dynamo.putItem({
         TableName: process.env.DYNAMOTABLECLIENT,
         Item: {
-            PK:"USER",
+            PK: "USER",
             ...commandPayload,
             delete: false,
             points: 0
@@ -34,19 +34,26 @@ const getClient = async (dni) => {
             dni
         },
     }
-    const payload = await dynamo.getItem(params).then( r => {
-       
-        if(r?.Item){
-            const { delete: D,  PK , ...Image}  = r?.Item;
+    const payload = await dynamo.getItem(params).then(r => {
 
-            if(D){
-                return { delete: D, ...Image};
+        if (r?.Item) {
+            const {
+                delete: D,
+                PK,
+                ...Image
+            } = r?.Item;
+
+            if (D) {
+                return {
+                    delete: D,
+                    ...Image
+                };
             }
             return Image
         }
         return r?.Item;
 
-    }  ).catch(err => {
+    }).catch(err => {
         throw new ErrorHandled(err.message, {
             status: 500,
             code: "GET AN USER"
@@ -56,7 +63,50 @@ const getClient = async (dni) => {
     return payload
 }
 
-const updateClient = async (dni, { commandPayload }) => {
+const getClients = async () => {
+
+    const params = {
+        KeyConditionExpression: "PK = :PK",
+        ExpressionAttributeValues: {
+            ":PK": "USER"
+        },
+        TableName: process.env.DYNAMOTABLECLIENT,
+    }
+    const payload = await dynamo.queryTable(params).then(r => {
+
+        return r.Items.filter((client) => {
+            const {
+                delete: D,
+                PK,
+                ...Image
+            } = client;
+
+            if (D) {
+                return false
+            }
+            return true
+        }).map((client) => {
+            const {
+                delete: D,
+                ...Image
+            } = client;
+            return Image
+        })
+
+        return Image
+    }).catch(err => {
+        throw new ErrorHandled(err.message, {
+            status: 500,
+            code: "GET USERS"
+        })
+    });
+
+    return payload
+}
+
+const updateClient = async (dni, {
+    commandPayload
+}) => {
     let UpdateExpression = 'set ';
     const ExpressionAttributeNames = {};
     const ExpressionAttributeValues = {};
@@ -127,5 +177,6 @@ module.exports = {
     getClient,
     createClient,
     updateClient,
-    deleteClient
+    deleteClient,
+    getClients
 }

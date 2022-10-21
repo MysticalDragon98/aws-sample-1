@@ -31,6 +31,36 @@ create-client:
               - X-Amz-User-Agent
               - X-Amzn-Trace-Id
             allowCredentials: false
+
+
+get-clients:
+  name: ${self:service}-${self:provider.stage}-get-clients
+  handler: src/client/handler/getAll.handler
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+      Resource:
+        - "arn:aws:dynamodb:us-east-1:*:table/${self:service}-Client"
+  environment:
+    ENVIRONMENT: ${self:provider.stage}
+  events:
+    - httpApi:
+        path: /${self:provider.stage}/clients
+        method: get
+        cors:
+          origin: "*"
+          headers:
+            - Content-Type
+            - X-Amz-Date
+            - Authorization
+            - X-Api-Key
+            - X-Amz-Security-Token
+            - X-Amz-User-Agent
+            - X-Amzn-Trace-Id
+          allowCredentials: false
+
+
 get-client:
   name: ${self:service}-${self:provider.stage}-get-client
   handler: src/client/handler/get.handler

@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "256ddb9c-cd4f-4167-bf82-248c4db256d7",
+		"_postman_id": "872a1794-3648-48da-9bb6-13bdfddefacc",
 		"name": "Naranjax",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6315931"
 	},
 	"item": [
 		{
@@ -10,15 +11,34 @@
 			"item": [
 				{
 					"name": "Create Client",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const json = pm.response.json();\r",
+									"pm.environment.set(\"CLIENT_DNI\", json.payload.dni);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "noauth"
 						},
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"dni\": \"1010089676\",\r\n    \"name\": \"Camilo Ses\",\r\n    \"lastname\": \"  torres\",\r\n    \"birthday\": \"06/04/1985\"\r\n}",
+							"raw": "{\r\n    \"dni\": \"1010089681\",\r\n    \"name\": \"Camilo Sexto\",\r\n    \"lastname\": \"torres\",\r\n    \"birthday\": \"06/04/1985\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -39,12 +59,25 @@
 				},
 				{
 					"name": "Get Client",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"auth": {
 							"type": "noauth"
 						},
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "traced-duration",
+								"value": "{}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}"
+						},
 						"url": {
 							"raw": "{{baseUrl}}/client/:dni",
 							"host": [
@@ -57,7 +90,7 @@
 							"variable": [
 								{
 									"key": "dni",
-									"value": "1010089676"
+									"value": "{{CLIENT_DNI}}"
 								}
 							]
 						}
@@ -72,36 +105,9 @@
 						},
 						"method": "DELETE",
 						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/client/:dni",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"client",
-								":dni"
-							],
-							"variable": [
-								{
-									"key": "dni",
-									"value": ""
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Client",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "PATCH",
-						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"birthday\": \"06/11/1984\",\r\n    \"name\":\"Felipe\"\r\n}",
+							"raw": "{}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -120,8 +126,73 @@
 							"variable": [
 								{
 									"key": "dni",
-									"value": ""
+									"value": "{{CLIENT_DNI}}"
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Client",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"birthday\": \"11/11/1984\",\r\n    \"name\":\"Felipe\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/client/:dni",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"client",
+								":dni"
+							],
+							"variable": [
+								{
+									"key": "dni",
+									"value": "{{CLIENT_DNI}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/clients",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"clients"
 							]
 						}
 					},
@@ -133,17 +204,24 @@
 			"name": "Product",
 			"item": [
 				{
-					"name": "get purcharse",
+					"name": "Get purchase",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"auth": {
 							"type": "noauth"
 						},
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{}"
+						},
 						"url": {
-							"raw": "{{baseUrlLocal}}/product/:productId/userdni/:dni",
+							"raw": "{{baseUrl}}/product/:productId/userdni/:dni",
 							"host": [
-								"{{baseUrlLocal}}"
+								"{{baseUrl}}"
 							],
 							"path": [
 								"product",
@@ -154,11 +232,11 @@
 							"variable": [
 								{
 									"key": "productId",
-									"value": "a8cf3612-1b24-40f3-80d7-8a2dab59b039"
+									"value": "{{PURCHASE_ID}}"
 								},
 								{
 									"key": "dni",
-									"value": "145010100"
+									"value": "{{CLIENT_DNI}}"
 								}
 							]
 						}
@@ -166,7 +244,7 @@
 					"response": []
 				},
 				{
-					"name": "delete purchase",
+					"name": "Delete purchase",
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -187,11 +265,11 @@
 							"variable": [
 								{
 									"key": "productId",
-									"value": "a8cf3612-1b24-40f3-80d7-8a2dab59b039"
+									"value": "{{PURCHASE_ID}}"
 								},
 								{
 									"key": "dni",
-									"value": "145010100"
+									"value": "{{CLIENT_DNI}}"
 								}
 							]
 						}
@@ -199,7 +277,19 @@
 					"response": []
 				},
 				{
-					"name": "Create  purcharse",
+					"name": "Create purchase",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const json = pm.response.json();\r",
+									"pm.environment.set(\"PURCHASE_ID\", json.payload.SK);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -208,7 +298,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"dni\": \"1010089676\",\r\n    \"products\": [{ \"name\":\"Juice\", \"price\":234}, { \"name\":\"TV \", \"price\":546}]\r\n}",
+							"raw": "{\r\n    \"dni\": \"{{CLIENT_DNI}}\",\r\n    \"products\": [{ \"name\":\"Juice\", \"price\":234 }, { \"name\":\"TV \", \"price\":546 }]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -228,7 +318,7 @@
 					"response": []
 				},
 				{
-					"name": "update purcharse",
+					"name": "Update purchase",
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -237,7 +327,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"products\": [{ \"name\":\"Juice\", \"price\":234}]\r\n}",
+							"raw": "{\r\n    \"products\": [{ \"name\":\"Juice\", \"price\":235 }]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -258,11 +348,11 @@
 							"variable": [
 								{
 									"key": "productId",
-									"value": "a8cf3612-1b24-40f3-80d7-8a2dab59b039"
+									"value": "{{PURCHASE_ID}}"
 								},
 								{
 									"key": "dni",
-									"value": "145010100"
+									"value": "{{CLIENT_DNI}}"
 								}
 							]
 						}

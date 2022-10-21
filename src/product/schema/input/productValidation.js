@@ -28,16 +28,12 @@ class CreateProductValidation extends InputValidation {
 class GetProductValidation extends InputValidation {
     constructor(payload, meta) {
         super({
-            type: 'PRODUCT.GET',
+            type: 'PRODUCT.GET_ALL',
             specversion: 'v1.0.0',
             source: meta.source,
             payload: payload,
             schema: {
                 dni: {
-                    type: String,
-                    required: true
-                },
-                productId: {
                     type: String,
                     required: true
                 }

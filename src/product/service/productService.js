@@ -74,9 +74,9 @@ const getPurcharse =async (SK, dnix, user)=> {
             }
 
             if(D){
-                return { delete: D, ...user ? { user }:{ dni } , ...Image};
+                return { delete: D, ...Image};
             }
-            return {...user ? { user }:{ dni }, ...Image}
+            return {...user , ...Image}
         }
         return r?.Item;
 
@@ -89,6 +89,45 @@ const getPurcharse =async (SK, dnix, user)=> {
 
     return payload
 }
+
+const getPurcharses =async ()=> {
+    const params = {
+        KeyConditionExpression: "PK = :PK",
+        ExpressionAttributeValues: {
+            ":PK": "PURCHASE"
+        },
+        TableName: process.env.DYNAMOTABLEPRODUCT,
+    }
+    const payload = await dynamo.queryTable(params).then( r => {
+        return r.Items.filter((purchase) => {
+            const {
+                delete: D,
+            } = purchase;
+
+            if (D) {
+                return false
+            }
+            return true
+        }).map((purchase) => {
+            const {
+                delete: D,
+                PK,
+                ...Image
+            } = purchase;
+            return Image
+        })
+
+
+    }  ).catch(err => {
+        throw new ErrorHandled(err.message, {
+            status: 500,
+            code: "GET PURCHASES"
+        })
+    });
+
+    return payload
+}
+
 
 const updatePurcharse =async (commandPayload , sk)=> {
     let UpdateExpression = 'set ';
@@ -190,5 +229,6 @@ module.exports = {
     getPurcharse,
     updatePurcharse,
     deletePurchase,
-    updatePoints
+    updatePoints,
+    getPurcharses
 }

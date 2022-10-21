@@ -76,9 +76,7 @@ const getClients = async () => {
 
         return r.Items.filter((client) => {
             const {
-                delete: D,
-                PK,
-                ...Image
+                delete: D
             } = client;
 
             if (D) {
@@ -88,12 +86,11 @@ const getClients = async () => {
         }).map((client) => {
             const {
                 delete: D,
+                PK,
                 ...Image
             } = client;
             return Image
         })
-
-        return Image
     }).catch(err => {
         throw new ErrorHandled(err.message, {
             status: 500,

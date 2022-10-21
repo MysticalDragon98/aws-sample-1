@@ -57,6 +57,35 @@ get-purchase:
               - X-Amzn-Trace-Id
             allowCredentials: false
 
+get-purchases:
+    name: ${self:service}-${self:provider.stage}-get-products
+    handler: src/product/handler/getAll.handler
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource:
+          - "arn:aws:dynamodb:us-east-1:*:table/${self:service}-Client"
+          - "arn:aws:dynamodb:us-east-1:*:table/${self:service}-Product"
+
+    environment:
+      ENVIRONMENT: ${self:provider.stage}
+    events:
+      - httpApi:
+          path: /${self:provider.stage}/product/userdni/{dni}
+          method: get
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Amzn-Trace-Id
+            allowCredentials: false
+
 update-purchase:
     name: ${self:service}-${self:provider.stage}-update-product
     handler: src/product/handler/update.handler
